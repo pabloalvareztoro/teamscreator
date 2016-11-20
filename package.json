@@ -1,8 +1,8 @@
 {
   "name": "teamscreator",
   "version": "0.0.0",
-  "description": "ERROR: No README.md file found!",
-  "main": "app.js",
+  "description": "Teams Creator REST service",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +10,10 @@
   "author": "",
   "license": "BSD",
   "dependencies": {
-    "express": "~4.14.0"
+    "body-parser": "~1.0.1",
+    "express": "~4.14.0",
+    "kerberos": "0.0.22",
+    "mongodb": "^2.2.11",
+    "mongoose": "~4.3.7"
   }
 }
