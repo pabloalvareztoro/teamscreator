@@ -8,8 +8,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://teamnames:teamnames@localhost:27017/teamnames');
 
-var FirstName = require('./app/models/firstName');
-var SecondName = require('./app/models/secondName');
+var Names = require('./app/models/name');
 
 var team = require('./app/models/team');
 
@@ -30,13 +29,31 @@ router.route('/teamcreator/:number').get(function(req, res) {
     getTeamNames(req.params.number, req, res);
 });
 
+router.route('/teamcreator/firstname/:name').get(function(req, res) {
+    saveName(req.params.name, res, Names.firstName);
+});
+
+router.route('/teamcreator/secondname/:name').get(function(req, res) {
+    saveName(req.params.name, res, Names.secondName);
+});
+
 function getTeamNames(number, req, res){
-    FirstName.find({}, function(err, firstnameres) {
+    Names.firstName.find({}, function(err, firstnameres) {
         if (err) throw err;
-        SecondName.find({}, function(err, secondnameres) {
-            if (err) throw err;
-            team.createTeams(res, number, firstnameres, secondnameres)
+        Names.secondName.find({}, function(err, secondnameres) {
+            team.createTeams(res, Math.min(number, firstnameres.length, secondnameres.length), firstnameres, secondnameres);
         });
+    });
+}
+
+function saveName(name, res, Name){
+    var newName = new Name({
+        name: name
+    })
+    newName.save(function(err) {
+        if (err) throw err;
+        console.log('Name saved successfully!');
+        res.json({ message: 'Name saved!' });
     });
 }
 

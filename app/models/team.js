@@ -23,17 +23,16 @@ function createTeam(firstName, secondName){
 
 function getNameList(number, res){
     var list = [];
-    var pivot = res.length;
-    for(var i=0; i < number && pivot > 0; i++){
-        list[i] = takeElementFromList(res, getRandomInt(pivot - 1), pivot)
-        pivot--;
+    for(var i=0; i < number; i++){
+        list[i] = takeRandomElementFromList(res, res.length - i-1)
     }
     return list;
 }
 
-function takeElementFromList(list, number, pivot){
-    var element = list.slice(0, pivot)[number];
-    list[number] = list[pivot];
+function takeRandomElementFromList(list, pivot){
+    randomNumber = getRandomInt(pivot);
+    var element = list[randomNumber];
+    list[randomNumber] = list[pivot];
     list[pivot] = element;
     return element;
 }
