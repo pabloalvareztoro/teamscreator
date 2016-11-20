@@ -39,8 +39,9 @@ router.route('/teamcreator/secondname/:name').get(function(req, res) {
 
 function getTeamNames(number, req, res){
     Names.firstName.find({}, function(err, firstnameres) {
-        if (err) throw err;
+        if (err) handleError(res, err.message, "Failed to access database.");
         Names.secondName.find({}, function(err, secondnameres) {
+            if (err) handleError(res, err.message, "Failed to access database.");
             team.createTeams(res, Math.min(number, firstnameres.length, secondnameres.length), firstnameres, secondnameres);
         });
     });
@@ -51,10 +52,15 @@ function saveName(name, res, Name){
         name: name
     })
     newName.save(function(err) {
-        if (err) throw err;
+        if (err) handleError(res, err.message, "Failed to access database.");
         console.log('Name saved successfully!');
         res.json({ message: 'Name saved!' });
     });
+}
+
+function handleError(res, reason, message, code) {
+    console.log("ERROR: " + reason);
+    res.status(code || 500).json({"error": message});
 }
 
 app.use('/', router);
