@@ -1,6 +1,6 @@
 {
   "name": "teamscreator",
-  "version": "1.0-SNAPSHOT",
+  "version": "1.0.0-SNAPSHOT",
   "description": "Leaguemaker: Team Creator",
   "scripts": {
     "start": "node ./server.js"
