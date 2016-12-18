@@ -1,14 +1,11 @@
 {
   "name": "teamscreator",
-  "version": "0.0.0",
-  "description": "Teams Creator REST service",
-  "main": "server.js",
+  "version": "1.0-SNAPSHOT",
+  "description": "Leaguemaker: Team Creator",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server.js"
   },
-  "repository": "",
-  "author": "",
-  "license": "BSD",
+  "author": "Pablo Álvarez",
   "dependencies": {
     "body-parser": "~1.0.1",
     "express": "~4.14.0",
