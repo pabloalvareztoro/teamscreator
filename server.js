@@ -6,7 +6,7 @@ var port = process.env.PORT || 3000;
 var router = express.Router();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://teamnames:teamnames@localhost:27017/teamnames');
+mongoose.connect(process.env.MONGODB_URI);
 
 var Names = require('./app/models/name');
 
