@@ -31,7 +31,7 @@ router.route('/teamcreator/nonexistentteams').get(function(req, res) {
     getTeamNames(1, req, res);
 });
 
-router.route('/teamcreator/:number').get(function(req, res) {
+router.route('/teamcreator/nonexistentteams/:number').get(function(req, res) {
     getTeamNames(req.params.number, req, res);
 });
 
@@ -49,7 +49,7 @@ router.route('/teamcreator/realteam/:name/:league').put(function(req, res) {
     saveRealTeam(req.params.name, req.params.league, res, RealTeams.realTeam);
 });
 
-router.route('/teamcreator/realteams/').get(function(req, res) {
+router.route('/teamcreator/realteams').get(function(req, res) {
     getRealTeams(1, null, req, res);
 });
 
@@ -57,11 +57,7 @@ router.route('/teamcreator/realteams/:number').get(function(req, res) {
     getRealTeams(req.params.number, null, req, res);
 });
 
-router.route('/teamcreator/realteams/:league').get(function(req, res) {
-    getRealTeams(1, req.params.league, req, res);
-});
-
-router.route('/teamcreator/realteams/:league/:number').get(function(req, res) {
+router.route('/teamcreator/realteams/:number/:league').get(function(req, res) {
     getRealTeams(req.params.number, req.params.league, req, res);
 });
 
