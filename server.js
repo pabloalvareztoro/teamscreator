@@ -10,7 +10,11 @@ mongoose.connect(process.env.MONGODB_URI);
 
 var Names = require('./app/models/name');
 
-var team = require('./app/models/team');
+var teamService = require('./app/models/team');
+
+var RealTeams = require('./app/models/realteam');
+
+var realTeamService = require('./app/models/realteamservice');
 
 router.use(function(req, res, next) {
     console.log('Endpoint accessed...');
@@ -21,6 +25,8 @@ router.route('/').get(function(req, res) {
     res.json({ message: 'Teams Creator REST service' });
 });
 
+//Non-existent teams
+
 router.route('/teamcreator/').get(function(req, res) {
     getTeamNames(1, req, res);
 });
@@ -29,12 +35,34 @@ router.route('/teamcreator/:number').get(function(req, res) {
     getTeamNames(req.params.number, req, res);
 });
 
-router.route('/teamcreator/firstname/:name').get(function(req, res) {
+router.route('/teamcreator/firstname/:name').put(function(req, res) {
     saveName(req.params.name, res, Names.firstName);
 });
 
-router.route('/teamcreator/secondname/:name').get(function(req, res) {
+router.route('/teamcreator/secondname/:name').put(function(req, res) {
     saveName(req.params.name, res, Names.secondName);
+});
+
+//Real teams
+
+router.route('/realteams/realteam/:name/:league').put(function(req, res) {
+    saveRealTeam(req.params.name, req.params.league, res, RealTeams.realTeam);
+});
+
+router.route('/realteams/').get(function(req, res) {
+    getRealTeams(1, null, req, res);
+});
+
+router.route('/realteams/:number').get(function(req, res) {
+    getRealTeams(req.params.number, null, req, res);
+});
+
+router.route('/realteams/:league').get(function(req, res) {
+    getRealTeams(1, req.params.league, req, res);
+});
+
+router.route('/realteams/:league/:number').get(function(req, res) {
+    getRealTeams(req.params.number, req.params.league, req, res);
 });
 
 function getTeamNames(number, req, res){
@@ -42,8 +70,16 @@ function getTeamNames(number, req, res){
         if (err) handleError(res, err.message, "Failed to access database.");
         Names.secondName.find({}, function(err, secondnameres) {
             if (err) handleError(res, err.message, "Failed to access database.");
-            team.createTeams(res, Math.min(number, firstnameres.length, secondnameres.length), firstnameres, secondnameres);
+            teamService.createTeams(res, Math.min(number, firstnameres.length, secondnameres.length), firstnameres, secondnameres);
         });
+    });
+}
+
+function getRealTeams(number, league, req, res){
+    var query = (league != null) ? {"league": league} : {};
+    RealTeams.realTeam.find(query, function(err, realteamsres) {
+        if (err) handleError(res, err.message, "Failed to access database.");
+        realTeamService.createRealTeams(res, Math.min(number, realteamsres.length), realteamsres);
     });
 }
 
@@ -52,6 +88,18 @@ function saveName(name, res, Name){
         name: name
     })
     newName.save(function(err) {
+        if (err) handleError(res, err.message, "Failed to access database.");
+        console.log('Name saved successfully!');
+        res.json({ message: 'Name saved!' });
+    });
+}
+
+function saveRealTeam(name, league, res, RealTeam){
+    var newRealTeam = new RealTeam({
+        name: name,
+        league: league
+    })
+    newRealTeam.save(function(err) {
         if (err) handleError(res, err.message, "Failed to access database.");
         console.log('Name saved successfully!');
         res.json({ message: 'Name saved!' });
