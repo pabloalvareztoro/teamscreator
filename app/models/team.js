@@ -6,15 +6,11 @@ function createTeams(res, number, firstnameres, secondnameres){
     var firstNameList = getNameList(number, firstnameres);
     var secondNameList = getNameList(number, secondnameres);
 
-    if(number == 1){
-        res.json(createTeam(firstNameList[0], secondNameList[0]))
-    } else {
-        var teamList = [];
-        for(var i=0; i<number; i++){
-            teamList[i] = createTeam(firstNameList[i], secondNameList[i])
-        }
-        res.json(teamList);
+    var teamList = [];
+    for(var i=0; i<number; i++){
+        teamList[i] = createTeam(firstNameList[i], secondNameList[i])
     }
+    res.json(teamList);
 }
 
 function createTeam(firstName, secondName){

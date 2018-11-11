@@ -5,15 +5,11 @@ function RealTeam(name){
 function createRealTeams(res, number, realTeam){
     var realTeamList = getRealTeamList(number, realTeam);
 
-    if(number == 1){
-        res.json(new RealTeam(realTeamList[0]));
-    } else {
-        var jsonRealTeamList = [];
-        for(var i=0; i<number; i++){
-            jsonRealTeamList[i] = new RealTeam(realTeamList[i])
-        }
-        res.json(jsonRealTeamList);
+    var jsonRealTeamList = [];
+    for(var i=0; i<number; i++){
+        jsonRealTeamList[i] = new RealTeam(realTeamList[i].name)
     }
+    res.json(jsonRealTeamList);
 }
 
 function getRealTeamList(number, res){
