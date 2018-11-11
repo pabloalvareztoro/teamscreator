@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var port = process.env.PORT || 3000;
 
@@ -45,8 +47,16 @@ router.route('/teamcreator/secondname/:name').put(function(req, res) {
 
 //Real teams
 
-router.route('/teamcreator/realteam/:name/:league').put(function(req, res) {
-    saveRealTeam(req.params.name, req.params.league, res, RealTeams.realTeam);
+router.route('/teamcreator/realteam').post(function(req, res) {
+    saveRealTeam(req.body, res, RealTeams.realTeam);
+});
+
+router.route('/teamcreator/realteam/:id').put(function(req, res) {
+    updateRealTeam(req.params.id, req.body, res, RealTeams.realTeam);
+});
+
+router.route('/teamcreator/realteam/:id').delete(function(req, res) {
+    deleteRealTeam(req.params.id, res, RealTeams.realTeam);
 });
 
 router.route('/teamcreator/realteams').get(function(req, res) {
@@ -90,16 +100,39 @@ function saveName(name, res, Name){
     });
 }
 
-function saveRealTeam(name, league, res, RealTeam){
-    var newRealTeam = new RealTeam({
-        name: name,
-        league: league
-    })
+function saveRealTeam(body, res, RealTeam){
+    var newRealTeam = createNewRealTeamObject(uuid.v1(), body)
     newRealTeam.save(function(err) {
         if (err) handleError(res, err.message, "Failed to access database.");
-        console.log('Name saved successfully!');
-        res.json({ message: 'Name saved!' });
+        console.log('Team saved successfully!');
+        res.json({ message: 'Team saved!' });
     });
+}
+
+function updateRealTeam(id, body, res, RealTeam){
+    var newRealTeam = createNewRealTeamObject(id, body)
+    newRealTeam.save({"_id": id}, function(err) {
+        if (err) handleError(res, err.message, "Failed to access database.");
+        console.log('Team updated successfully!');
+        res.json({ message: 'Team saved!' });
+    });
+}
+
+function deleteRealTeam(id, body, res, RealTeam){
+    newRealTeam.delete({"_id": id}, function(err) {
+        if (err) handleError(res, err.message, "Failed to access database.");
+        console.log('Team deleted successfully!');
+        res.json({ message: 'Team saved!' });
+    });
+}
+
+function createNewRealTeamObject(id, body){
+    var newRealTeam = new RealTeam(id)
+    newRealTeam.name = body.name
+    newRealTeam.league = body.league
+    newRealTeam.city = body.city
+    newRealTeam.country = body.country
+    newRealTeam.stadium = body.stadium
 }
 
 function handleError(res, reason, message, code) {

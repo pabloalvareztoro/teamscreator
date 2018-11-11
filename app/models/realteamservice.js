@@ -1,5 +1,5 @@
-function RealTeam(name){
-    this.name = name;
+function RealTeam(id){
+    this._id = id;
 }
 
 function createRealTeams(res, number, realTeam){
@@ -7,7 +7,13 @@ function createRealTeams(res, number, realTeam){
 
     var jsonRealTeamList = [];
     for(var i=0; i<number; i++){
-        jsonRealTeamList[i] = new RealTeam(realTeamList[i].name)
+        var jsonRealTeam = new RealTeam(realTeamList[i].id)
+        jsonRealTeam.name = realTeamList[i].name
+        jsonRealTeam.league = realTeamList[i].league
+        jsonRealTeam.city = realTeamList[i].city
+        jsonRealTeam.country = realTeamList[i].country
+        jsonRealTeam.stadium = realTeamList[i].stadium
+        jsonRealTeamList[i] = jsonRealTeam
     }
     res.json(jsonRealTeamList);
 }
